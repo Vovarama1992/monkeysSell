@@ -8,11 +8,11 @@ function App() {
   const refSecondRev = useRef(null);
 
   useEffect(() => {
-    askProducts().then(results => setProducts(results))
-
-
-  }, [])
-  
+    askProducts().then(results => {
+      setProducts(results);
+      console.log(results[0].price);
+    });
+  }, []);
 
   useEffect(() => {
     askRev().then(result => {
@@ -32,11 +32,9 @@ function App() {
         <Rev ref={refSecondRev} />
       </div>
      <OrderList orders={orders}></OrderList>
-     {products.map((pr, index) => {
-      const {image_url, title, description, price} = pr;
-      return (<ProductLook imgUrl={image_url} title={title} 
-        description={description} price={price} key={index}/>)
-     })}
+     
+       {products.length > 0 && <ProductLook product={products[0]} />}
+     
       
        
     </div>
@@ -66,13 +64,14 @@ function OrderList({ orders }) {
     </div>
   );
 }
-function ProductLook({ imgUrl, title, description, price}) {
+function ProductLook({ product }) {
   return (
     <div className="product">
-      <img src={imgUrl}></img><br></br>
-      {title}<br></br>
-      {description}<br></br>
-      Цена: {price}P
+      <img src={product.image_url}></img><br></br>
+      {product.title}<br></br>
+      {product.description}<br></br>
+      Цена: {product.price}P
+      <button className="buyButton">Купить</button>
     </div>
   )
 }
